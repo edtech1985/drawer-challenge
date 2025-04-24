@@ -1,4 +1,3 @@
-// challenges/hero-drawer/components/Drawer/MainDrawer.tsx
 import {
   Drawer,
   DrawerContent,
@@ -12,7 +11,12 @@ import {
   SelectItem,
   Select,
 } from "@heroui/react";
+import { useState } from "react";
 import { Plus } from "lucide-react";
+
+import { useMock } from "../../contexts/mock-context";
+
+import MockResponseDrawer from "./MockResponseDrawer";
 
 export const animals = [
   { key: "cat", label: "Cat" },
@@ -32,6 +36,8 @@ export const animals = [
 
 export default function MainDrawer() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [isMockDrawerOpen, setIsMockDrawerOpen] = useState(false);
+  const { selectedMock, setSelectedMock } = useMock();
 
   return (
     <>
@@ -102,14 +108,20 @@ export default function MainDrawer() {
                       <div>
                         <h4 className="font-medium">Mock Responses</h4>
                         <p className="text-gray-500 text-sm">
-                          Create or use a saved mock
+                          {selectedMock
+                            ? `${selectedMock}`
+                            : "Create or use a saved mock"}
                         </p>
                       </div>
-                      <button className="rounded-full p-1">
+                      <button
+                        className="rounded-full p-1"
+                        onClick={() => setIsMockDrawerOpen(true)}
+                      >
                         <Plus size={20} />
                       </button>
                     </div>
                   </div>
+
                   <div className="border rounded-lg mb-4">
                     <div className="p-3 flex justify-between items-center">
                       <div>
@@ -169,8 +181,14 @@ export default function MainDrawer() {
                       label="Group"
                       placeholder="Add your test to a group"
                       radius="sm"
+                      selectedKeys={selectedMock ? [selectedMock] : []} // agora refletindo o estado do contexto
                       size="lg"
                       variant="bordered"
+                      onSelectionChange={(keys) => {
+                        const key = String(Array.from(keys)[0]);
+
+                        setSelectedMock(key);
+                      }}
                     >
                       {animals.map((animal) => (
                         <SelectItem key={animal.key}>{animal.label}</SelectItem>
@@ -192,6 +210,10 @@ export default function MainDrawer() {
             </>
           )}
         </DrawerContent>
+        <MockResponseDrawer
+          isOpen={isMockDrawerOpen}
+          onClose={() => setIsMockDrawerOpen(false)}
+        />
       </Drawer>
     </>
   );

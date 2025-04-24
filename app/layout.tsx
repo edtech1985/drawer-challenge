@@ -1,3 +1,4 @@
+// app/layout.tsx
 import "@/styles/globals.css";
 import { Metadata, Viewport } from "next";
 import { Link } from "@heroui/link";
