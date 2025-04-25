@@ -13,9 +13,13 @@ import {
   Input,
   SelectItem,
   Select,
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem, // 👈 adicionado
 } from "@heroui/react";
 import { useState } from "react";
-import { ArrowLeftIcon, BookText, Plus } from "lucide-react";
+import { ArrowLeftIcon, BookText, MoreVertical, Plus } from "lucide-react";
 import Image from "next/image";
 
 import { useMock } from "../../contexts/mock-context";
@@ -59,7 +63,7 @@ const mockOptions = [
 export default function MainDrawer() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isMockDrawerOpen, setIsMockDrawerOpen] = useState(false);
-  const { selectedMock, selectedMockResponse } = useMock();
+  const { selectedMock, selectedMockResponse, setSelectedMock } = useMock(); // 👈 adicionado setSelectedMock
   const [isSaving, setIsSaving] = useState(false);
 
   const selectedMockName =
@@ -108,7 +112,7 @@ export default function MainDrawer() {
               </DrawerHeader>
               <DrawerBody>
                 <div className="mb-4">
-                  <div className="flex justify-between items-center mb-2">
+                  <div className="flex justify-between items-center mb-4">
                     <h3 className="font-medium uppercase text-sm">
                       Define Path
                     </h3>
@@ -193,12 +197,43 @@ export default function MainDrawer() {
                         )}
                       </div>
 
-                      <button
-                        className="rounded-full p-1"
-                        onClick={() => setIsMockDrawerOpen(true)}
-                      >
-                        <Plus size={20} />
-                      </button>
+                      {/* 🔽 Novo dropdown com Edit e Clear */}
+                      {selectedMock ? (
+                        <Dropdown>
+                          <DropdownTrigger>
+                            <Button
+                              isIconOnly
+                              className="rounded-full"
+                              variant="light"
+                            >
+                              <MoreVertical size={20} />
+                            </Button>
+                          </DropdownTrigger>
+                          <DropdownMenu
+                            aria-label="Mock options"
+                            onAction={(key) => {
+                              if (key === "edit") {
+                                setIsMockDrawerOpen(true);
+                              }
+                              if (key === "clear") {
+                                setSelectedMock(null); // 👈 limpa o mock
+                              }
+                            }}
+                          >
+                            <DropdownItem key="edit">Edit</DropdownItem>
+                            <DropdownItem key="clear" className="text-danger">
+                              Clear
+                            </DropdownItem>
+                          </DropdownMenu>
+                        </Dropdown>
+                      ) : (
+                        <button
+                          className="rounded-full p-1"
+                          onClick={() => setIsMockDrawerOpen(true)}
+                        >
+                          <Plus size={20} />
+                        </button>
+                      )}
                     </div>
                   </div>
 
