@@ -1,3 +1,5 @@
+// tailwind.config.ts
+
 import type { Config } from "tailwindcss";
 
 import { heroui } from "@heroui/theme";
@@ -186,11 +188,11 @@ export default {
             // Textual and commons
             background: "#0D0D0D", // SURFACE
             focus: "#FFFFFF", // PRIMARY
-            overlay: "#FaaFFF", // PRIMARY
+            overlay: "#FFFFFF", // PRIMARY
 
             // Surfaces
             content1: {
-              DEFAULT: "rgba(255,255,255, 0.05)", // SURFACE CONTAINER LOW
+              DEFAULT: "#0D0D0D", // SURFACE CONTAINER LOW
               foreground: "#FFFFFF", // ON SURFACE
             },
             content2: {

@@ -1,10 +1,3 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-[data-slot="listbox"] {
-  background-color: #0a0a0a !important; /* ou outra cor escura de sua paleta */
-  backdrop-filter: none !important;
-  z-index: 9999 !important; /* garante que vai aparecer por cima */
-  border: 1px solid #333; /* opcional, melhora contraste */
-}

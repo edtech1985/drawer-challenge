@@ -73,39 +73,35 @@ export default function MainDrawer() {
         Open Drawer
       </Button>
       <Drawer hideCloseButton isOpen={isOpen} onOpenChange={onOpenChange}>
-        <DrawerContent className="bg-black shadow-xl w-[420px]">
+        <DrawerContent className="bg-background shadow-xl w-[420px]">
           {(onClose) => (
             <>
               <DrawerHeader className="flex flex-col gap-1">
                 <div className="flex justify-between">
-                  <div>
-                    <Button
-                      isIconOnly
-                      aria-label="Back"
-                      color="primary"
-                      size="sm"
-                      variant="ghost"
-                      onPress={onClose}
-                    >
-                      <ArrowLeftIcon />
-                    </Button>
-                  </div>
-                  <div>
-                    <Button
-                      isIconOnly
-                      aria-label="Back"
-                      color="primary"
-                      size="sm"
-                      variant="ghost"
-                    >
-                      <BookText />
-                    </Button>
-                  </div>
+                  <Button
+                    isIconOnly
+                    aria-label="Back"
+                    color="primary"
+                    size="sm"
+                    variant="ghost"
+                    onPress={onClose}
+                  >
+                    <ArrowLeftIcon />
+                  </Button>
+                  <Button
+                    isIconOnly
+                    aria-label="Back"
+                    color="primary"
+                    size="sm"
+                    variant="ghost"
+                  >
+                    <BookText />
+                  </Button>
                 </div>
                 <h2 className="text-xl font-semibold mb-2">
                   Create a test case
                 </h2>
-                <p className="text-gray-500 mb-6">
+                <p className=" mb-6">
                   Define your coverage area and use tools to simulate the
                   desired paths.
                 </p>
@@ -118,16 +114,17 @@ export default function MainDrawer() {
                     </h3>
                     <div className="flex items-center gap-2">
                       <span className="text-sm mr-2">Full flow</span>
-                      <span className="text-sm text-gray-500">(8 steps)</span>
-
+                      <span className="text-sm text-gray-600 dark:text-gray-400">
+                        (8 steps)
+                      </span>
                       <Switch defaultSelected size="sm" />
                     </div>
                   </div>
-                  <div className="border rounded-lg mb-4">
+                  <div className="border dark:border-gray-700 rounded-lg mb-4">
                     <div className="p-3 flex justify-between items-center">
                       <div>
                         <h4 className="font-medium">Set the start and end</h4>
-                        <p className="text-gray-500 text-sm">
+                        <p className="dark:text-gray-400 text-sm">
                           Choose the path to be tested
                         </p>
                       </div>
@@ -137,17 +134,20 @@ export default function MainDrawer() {
                     </div>
                   </div>
                 </div>
+
                 <div className="mb-4">
                   <div className="flex justify-between items-center mb-2">
                     <h3 className="font-medium uppercase text-sm">
                       Define the conditions
                     </h3>
                   </div>
-                  <div className="border rounded-lg mb-4">
+
+                  {/* Payload Section */}
+                  <div className="border dark:border-gray-700 rounded-lg mb-4">
                     <div className="p-3 flex justify-between items-center">
                       <div>
                         <h4 className="font-medium">Payload</h4>
-                        <p className="text-gray-500 text-sm">
+                        <p className="text-gray-600 dark:text-gray-400 text-sm">
                           Create or use a saved payload
                         </p>
                       </div>
@@ -156,7 +156,9 @@ export default function MainDrawer() {
                       </button>
                     </div>
                   </div>
-                  <div className="border rounded-lg mb-4">
+
+                  {/* Mock Section */}
+                  <div className="border dark:border-gray-700 rounded-lg mb-4">
                     <div className="p-3 flex justify-between items-center">
                       <div className="flex items-center gap-2">
                         {selectedMock ? (
@@ -175,8 +177,7 @@ export default function MainDrawer() {
                               <h4 className="font-medium">
                                 {selectedMockName}
                               </h4>
-
-                              <p className="text-gray-500 text-sm">
+                              <p className="text-gray-600 dark:text-gray-400 text-sm">
                                 {mockOptions.find((m) => m.key === selectedMock)
                                   ?.label ?? selectedMock}
                               </p>
@@ -185,7 +186,7 @@ export default function MainDrawer() {
                         ) : (
                           <div>
                             <h4 className="font-medium">Mock Responses</h4>
-                            <p className="text-gray-500 text-sm">
+                            <p className="text-gray-600 dark:text-gray-400 text-sm">
                               Create or use a saved mock
                             </p>
                           </div>
@@ -201,11 +202,12 @@ export default function MainDrawer() {
                     </div>
                   </div>
 
-                  <div className="border rounded-lg mb-4">
+                  {/* Expect Results Section */}
+                  <div className="border dark:border-gray-700 rounded-lg mb-4">
                     <div className="p-3 flex justify-between items-center">
                       <div>
                         <h4 className="font-medium">Expect Results</h4>
-                        <p className="text-gray-500 text-sm">
+                        <p className="text-gray-600 dark:text-gray-400 text-sm">
                           Configure assertions
                         </p>
                       </div>
@@ -216,6 +218,7 @@ export default function MainDrawer() {
                   </div>
                 </div>
 
+                {/* Test Details */}
                 <div className="mb-4">
                   <div className="flex justify-between items-center mb-2">
                     <h3 className="font-medium uppercase text-sm">
@@ -271,6 +274,7 @@ export default function MainDrawer() {
                   </div>
                 </div>
               </DrawerBody>
+
               <DrawerFooter>
                 <div className="flex justify-between px-6 py-10 w-full">
                   <Button
@@ -286,7 +290,6 @@ export default function MainDrawer() {
                     isLoading={isSaving}
                     onPress={() => {
                       setIsSaving(true);
-
                       setTimeout(() => {
                         addToast({
                           description:
@@ -295,9 +298,7 @@ export default function MainDrawer() {
                           radius: "sm",
                           variant: "bordered",
                         });
-
                         setIsSaving(false);
-
                         onClose();
                       }, 1000);
                     }}

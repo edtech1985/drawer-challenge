@@ -136,7 +136,7 @@ export default function MockResponseDrawer({ isOpen, onClose }: Props) {
         placement="right"
         onOpenChange={onClose}
       >
-        <DrawerContent className="bg-black shadow-xl w-[420px]">
+        <DrawerContent className="bg-background shadow-xl w-[420px]">
           {() => (
             <>
               <DrawerHeader className="flex flex-col gap-1">
@@ -166,14 +166,14 @@ export default function MockResponseDrawer({ isOpen, onClose }: Props) {
                   </div>
                 </div>
                 <h2 className="text-xl font-semibold">Mock Response</h2>
-                <p className="text-gray-500 text-sm">
+                <p className="text-gray-500 dark:text-gray-400 text-sm">
                   You can choose a connector to simulate the response.
                 </p>
               </DrawerHeader>
 
               <DrawerBody>
                 {/* SELECT DE GRUPOS */}
-                <div className="rounded-lg mb-4 bg-black">
+                <div className="rounded-lg mb-4 ">
                   <Select
                     className="w-full"
                     disabledKeys={["select"]}
@@ -210,7 +210,11 @@ export default function MockResponseDrawer({ isOpen, onClose }: Props) {
                     }}
                   >
                     {steps.map((step) => (
-                      <SelectItem key={step.key} textValue={step.label}>
+                      <SelectItem
+                        key={step.key}
+                        className="bg-background"
+                        textValue={step.label}
+                      >
                         <div className="flex items-center gap-2">
                           {step.icon && (
                             <Image
@@ -237,7 +241,7 @@ export default function MockResponseDrawer({ isOpen, onClose }: Props) {
                       {[...Array(2)].map((_, i) => (
                         <div
                           key={i}
-                          className="flex items-center gap-3 bg-neutral-900 p-3 rounded-lg border border-neutral-700"
+                          className="flex items-center gap-3 bg-gray-100 dark:bg-neutral-900 p-3 rounded-lg border border-gray-200 dark:border-neutral-700"
                         >
                           <div>
                             <Skeleton className="flex rounded-full w-10 h-10" />
@@ -264,7 +268,7 @@ export default function MockResponseDrawer({ isOpen, onClose }: Props) {
                           (resp, index) => (
                             <div key={index} className="!w-full">
                               <Radio
-                                className="flex-row-reverse gap-8 bg-neutral-900 p-3 rounded-lg border border-neutral-700 mb-2 max-w-[400px]"
+                                className="flex-row-reverse gap-8 bg-gray-100 dark:bg-neutral-900 p-3 rounded-lg border border-gray-200 dark:border-neutral-700 mb-2 max-w-[400px]"
                                 size="lg"
                                 value={resp.name}
                               >
@@ -277,13 +281,13 @@ export default function MockResponseDrawer({ isOpen, onClose }: Props) {
                                     width={24}
                                   />
                                   <div className="flex flex-col">
-                                    <span className="font-medium text-white">
+                                    <span className="font-medium text-gray-900 dark:text-white">
                                       {resp.name}{" "}
-                                      <span className="text-gray-400">
+                                      <span className="text-gray-500 dark:text-gray-400">
                                         ({index + 1})
                                       </span>
                                     </span>
-                                    <span className="text-xs text-gray-400">
+                                    <span className="text-xs text-gray-500 dark:text-gray-400">
                                       Created at {resp.createdAt}
                                     </span>
                                   </div>
@@ -299,8 +303,11 @@ export default function MockResponseDrawer({ isOpen, onClose }: Props) {
 
                 {!localSelectedMock && (
                   <div className="flex flex-col items-center justify-center text-center rounded-lg mb-4">
-                    <GitCommit size="64" />
-                    <p className="text-gray-500 text-sm mb-4">
+                    <GitCommit
+                      className="text-gray-400 dark:text-gray-500"
+                      size="64"
+                    />
+                    <p className="text-gray-500 dark:text-gray-400 text-sm mb-4">
                       Choose a step to see saved
                       <br />
                       mocked responses.
@@ -323,7 +330,7 @@ export default function MockResponseDrawer({ isOpen, onClose }: Props) {
                       const selectedResponseObj =
                         localSelectedMock && selectedResponse
                           ? mockedResponses[localSelectedMock as StepKey].find(
-                              (r) => r.name === selectedResponse,
+                              (r) => r.name === selectedResponse
                             )
                           : null;
 
