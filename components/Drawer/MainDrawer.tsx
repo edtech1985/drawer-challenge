@@ -85,19 +85,21 @@ export default function MainDrawer() {
                   <Button
                     isIconOnly
                     aria-label="Back"
+                    className="bg-trtansparent"
                     color="primary"
                     size="sm"
-                    variant="ghost"
+                    variant="flat"
                     onPress={onClose}
                   >
                     <ArrowLeftIcon />
                   </Button>
                   <Button
                     isIconOnly
-                    aria-label="Back"
+                    aria-label="Documentation"
+                    className="bg-transparent"
                     color="primary"
                     size="sm"
-                    variant="ghost"
+                    variant="flat"
                   >
                     <BookText />
                   </Button>
@@ -216,7 +218,7 @@ export default function MainDrawer() {
                                 setIsMockDrawerOpen(true);
                               }
                               if (key === "clear") {
-                                setSelectedMock(null); // 👈 limpa o mock
+                                setSelectedMock("");
                               }
                             }}
                           >
