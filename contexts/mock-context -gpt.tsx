@@ -1,21 +1,27 @@
 // contexts/mock-context.tsx
-import { createContext, useState, useContext, ReactNode } from "react";
+
+import { createContext, useContext, useState } from "react";
 
 type MockResponse = {
+  key: string;
   name: string;
-  createdAt: string;
 };
 
 type MockContextType = {
   selectedMock: string | null;
-  setSelectedMock: (mock: string) => void;
+  setSelectedMock: (key: string | null) => void;
   selectedMockResponse: MockResponse | null;
   setSelectedMockResponse: (response: MockResponse | null) => void;
 };
 
-const MockContext = createContext<MockContextType | undefined>(undefined);
+const MockContext = createContext<MockContextType>({
+  selectedMock: null,
+  setSelectedMock: () => {},
+  selectedMockResponse: null,
+  setSelectedMockResponse: () => {},
+});
 
-export function MockProvider({ children }: { children: ReactNode }) {
+export function MockProvider({ children }: { children: React.ReactNode }) {
   const [selectedMock, setSelectedMock] = useState<string | null>(null);
   const [selectedMockResponse, setSelectedMockResponse] =
     useState<MockResponse | null>(null);
@@ -34,12 +40,4 @@ export function MockProvider({ children }: { children: ReactNode }) {
   );
 }
 
-export function useMock() {
-  const context = useContext(MockContext);
-
-  if (context === undefined) {
-    throw new Error("useMock must be used within a MockProvider");
-  }
-
-  return context;
-}
+export const useMock = () => useContext(MockContext);

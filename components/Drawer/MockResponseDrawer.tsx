@@ -1,3 +1,4 @@
+// components/Drawer/MockResponseDrawer.tsx
 "use client";
 
 import {
@@ -11,8 +12,6 @@ import {
   SelectItem,
   Divider,
   Skeleton,
-  ToastProvider,
-  addToast,
 } from "@heroui/react";
 import { ArrowLeftIcon, BookText, GitCommit } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -80,7 +79,8 @@ const mockedResponses = {
 };
 
 export default function MockResponseDrawer({ isOpen, onClose }: Props) {
-  const { selectedMock, setSelectedMock } = useMock();
+  const { selectedMock, setSelectedMock, setSelectedMockResponse } = useMock();
+
   const [selectedResponse, setSelectedResponse] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -158,6 +158,27 @@ export default function MockResponseDrawer({ isOpen, onClose }: Props) {
                     disabledKeys={["select"]}
                     placeholder="Choose a step to mock..."
                     radius="sm"
+                    renderValue={(items) => {
+                      const key = items[0]?.key as string;
+                      const selected = steps.find((s) => s.key === key);
+
+                      if (!selected) return null;
+
+                      return (
+                        <div className="flex items-center gap-2">
+                          {selected.icon && (
+                            <Image
+                              alt="Selected step icon"
+                              className="w-6 h-6 shrink-0"
+                              height={40}
+                              src={selected.icon}
+                              width={40}
+                            />
+                          )}
+                          <span>{selected.label}</span>
+                        </div>
+                      );
+                    }}
                     selectedKeys={selectedMock ? [selectedMock] : []}
                     size="lg"
                     variant="bordered"
@@ -271,18 +292,23 @@ export default function MockResponseDrawer({ isOpen, onClose }: Props) {
               <DrawerFooter>
                 <div className="flex justify-between w-full px-6 py-4">
                   <Button
-                    className={`w-full ${
-                      !selectedResponse ? "cursor-not-allowed opacity-50" : ""
-                    }`}
+                    className={`w-full ${!selectedResponse ? "cursor-not-allowed opacity-50" : ""}`}
                     color="primary"
                     isDisabled={!selectedResponse}
                     onPress={() => {
-                      addToast({
-                        description: "Your test has been created successfully.",
-                        color: "success",
-                        radius: "sm",
-                        variant: "bordered",
-                      });
+                      // Encontre o objeto de resposta selecionado
+                      const selectedResponseObj =
+                        selectedMock && selectedResponse
+                          ? mockedResponses[selectedMock as StepKey].find(
+                              (r) => r.name === selectedResponse
+                            )
+                          : null;
+
+                      // Atualize o contexto com a resposta selecionada
+                      if (selectedResponseObj) {
+                        setSelectedMockResponse(selectedResponseObj);
+                      }
+
                       onClose();
                     }}
                   >

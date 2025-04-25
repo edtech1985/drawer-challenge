@@ -1,4 +1,7 @@
+// components/Drawer/MainDrawer.tsx
+
 import {
+  addToast,
   Drawer,
   DrawerContent,
   DrawerHeader,
@@ -13,6 +16,7 @@ import {
 } from "@heroui/react";
 import { useState } from "react";
 import { ArrowLeftIcon, BookText, Plus } from "lucide-react";
+import Image from "next/image";
 
 import { useMock } from "../../contexts/mock-context";
 
@@ -34,10 +38,33 @@ export const animals = [
   { key: "crocodile", label: "Crocodile" },
 ];
 
+const mockOptions = [
+  {
+    key: "session-management",
+    label: "Session Management",
+    icon: "/pipeline-step-session-management.svg",
+  },
+  {
+    key: "rest-v2",
+    label: "Rest V2 (HTTP / APIs)",
+    icon: "/pipeline-step-rest.svg",
+  },
+  {
+    key: "transformer-jolt",
+    label: "Transformer (JOLT)",
+    icon: "/pipeline-step-jolt.svg",
+  },
+];
+
 export default function MainDrawer() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isMockDrawerOpen, setIsMockDrawerOpen] = useState(false);
-  const { selectedMock, setSelectedMock } = useMock();
+  const { selectedMock, selectedMockResponse } = useMock(); // Não precisa passar tipo aqui
+
+  const selectedMockName =
+    selectedMockResponse && typeof selectedMockResponse === "object"
+      ? selectedMockResponse.name
+      : "Mock Responses";
 
   return (
     <>
@@ -130,14 +157,40 @@ export default function MainDrawer() {
                   </div>
                   <div className="border rounded-lg mb-4">
                     <div className="p-3 flex justify-between items-center">
-                      <div>
-                        <h4 className="font-medium">Mock Responses</h4>
-                        <p className="text-gray-500 text-sm">
-                          {selectedMock
-                            ? `${selectedMock}`
-                            : "Create or use a saved mock"}
-                        </p>
+                      <div className="flex items-center gap-2">
+                        {selectedMock ? (
+                          <>
+                            <Image
+                              alt="mock icon"
+                              className="w-5 h-5"
+                              height={20}
+                              src={
+                                mockOptions.find((m) => m.key === selectedMock)
+                                  ?.icon ?? "/fallback-icon.svg"
+                              }
+                              width={20}
+                            />
+                            <div>
+                              <h4 className="font-medium">
+                                {selectedMockName}
+                              </h4>
+
+                              <p className="text-gray-500 text-sm">
+                                {mockOptions.find((m) => m.key === selectedMock)
+                                  ?.label ?? selectedMock}
+                              </p>
+                            </div>
+                          </>
+                        ) : (
+                          <div>
+                            <h4 className="font-medium">Mock Responses</h4>
+                            <p className="text-gray-500 text-sm">
+                              Create or use a saved mock
+                            </p>
+                          </div>
+                        )}
                       </div>
+
                       <button
                         className="rounded-full p-1"
                         onClick={() => setIsMockDrawerOpen(true)}
@@ -209,11 +262,11 @@ export default function MainDrawer() {
                       selectedKeys={selectedMock ? [selectedMock] : []} // agora refletindo o estado do contexto
                       size="lg"
                       variant="bordered"
-                      onSelectionChange={(keys) => {
-                        const key = String(Array.from(keys)[0]);
+                      // onSelectionChange={(keys) => {
+                      //   const key = String(Array.from(keys)[0]);
 
-                        setSelectedMock(key);
-                      }}
+                      //   setSelectedMock(key);
+                      // }}
                     >
                       {animals.map((animal) => (
                         <SelectItem key={animal.key}>{animal.label}</SelectItem>
@@ -227,7 +280,18 @@ export default function MainDrawer() {
                   <Button color="danger" variant="flat" onPress={onClose}>
                     Cancel
                   </Button>
-                  <Button color="primary" onPress={onClose}>
+                  <Button
+                    color="primary"
+                    onPress={() => {
+                      addToast({
+                        description: "Your test has been created successfully.",
+                        color: "success",
+                        radius: "sm",
+                        variant: "bordered",
+                      });
+                      onClose();
+                    }}
+                  >
                     Save
                   </Button>
                 </div>
