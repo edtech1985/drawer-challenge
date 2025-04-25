@@ -43,11 +43,6 @@ export const steps = [
     icon: "/pipeline-step-rest.svg",
   },
   {
-    key: "session-management2",
-    label: "Session Management",
-    icon: "/pipeline-step-session-management.svg",
-  },
-  {
     key: "transformer-jolt",
     label: "Transformer (JOLT)",
     icon: "/pipeline-step-jolt.svg",
@@ -79,10 +74,23 @@ const mockedResponses = {
 };
 
 export default function MockResponseDrawer({ isOpen, onClose }: Props) {
-  const { selectedMock, setSelectedMock, setSelectedMockResponse } = useMock();
+  const {
+    selectedMock,
+    setSelectedMock,
+    selectedMockResponse,
+    setSelectedMockResponse,
+  } = useMock();
 
-  const [selectedResponse, setSelectedResponse] = useState<string | null>(null);
+  const [selectedResponse, setSelectedResponse] = useState<string | null>(
+    selectedMockResponse?.name || null
+  );
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (isOpen && selectedMockResponse) {
+      setSelectedResponse(selectedMockResponse.name);
+    }
+  }, [isOpen, selectedMockResponse]);
 
   useEffect(() => {
     if (isOpen && !selectedMock) {
@@ -95,13 +103,32 @@ export default function MockResponseDrawer({ isOpen, onClose }: Props) {
   useEffect(() => {
     if (selectedMock) {
       setLoading(true);
+
+      // Verifica se já existe uma resposta selecionada para este mock
+      if (
+        selectedMockResponse &&
+        mockedResponses[selectedMock as StepKey]?.some(
+          (r) => r.name === selectedMockResponse.name
+        )
+      ) {
+        setSelectedResponse(selectedMockResponse.name);
+      } else {
+        // Se não há uma resposta selecionada para este mock, limpa a seleção
+        setSelectedResponse(null);
+      }
+
       const timer = setTimeout(() => setLoading(false), 500);
 
       return () => clearTimeout(timer);
     }
-  }, [selectedMock]);
+  }, [selectedMock, selectedMockResponse]);
 
   const handleChange = (key: string) => {
+    // Se for um novo mock diferente do atual, limpa a resposta selecionada no contexto
+    if (key !== selectedMock) {
+      setSelectedMockResponse(null);
+    }
+
     setSelectedMock(key);
     localStorage.setItem("mock-response-selected-step", key);
     setSelectedResponse(null);
