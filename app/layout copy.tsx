@@ -38,17 +38,20 @@ export default function RootLayout({
       <head />
       <body
         className={clsx(
-          "h-full bg-background font-sans antialiased ",
+          "h-full bg-background font-sans antialiased",
           fontSans.variable
         )}
       >
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
-          <div className="flex flex-col h-screen">
+          <div className="relative flex flex-col h-full">
             <Navbar />
-            <main className="flex-1 min-h-0 flex items-center justify-center px-6">
+            <main
+              className="px-6 flex items-center justify-center"
+              style={{ height: "calc(100vh - 64px - 48px)" }}
+            >
               {children}
             </main>
-            <footer className="h-12 flex items-center justify-center">
+            <footer className="w-full flex items-center justify-center py-3">
               <Link
                 isExternal
                 className="flex items-center gap-1 text-current"

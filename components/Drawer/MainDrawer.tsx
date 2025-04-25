@@ -73,7 +73,7 @@ export default function MainDrawer() {
 
   return (
     <>
-      <Button disableRipple color="warning" variant="flat" onPress={onOpen}>
+      <Button disableRipple color="secondary" variant="flat" onPress={onOpen}>
         Open Drawer
       </Button>
       <Drawer hideCloseButton isOpen={isOpen} onOpenChange={onOpenChange}>
