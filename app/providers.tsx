@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 
 import { MockProvider } from "@/contexts/mock-context";
+import { ToastProvider } from "@heroui/react";
 
 export interface ProvidersProps {
   children: React.ReactNode;
@@ -29,6 +30,7 @@ export function Providers({ children, themeProps }: ProvidersProps) {
 
   return (
     <HeroUIProvider navigate={router.push}>
+      <ToastProvider placement="bottom-left" />
       <NextThemesProvider {...themeProps}>
         <MockProvider>{children}</MockProvider>
       </NextThemesProvider>

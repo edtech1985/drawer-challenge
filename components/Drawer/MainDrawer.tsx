@@ -12,7 +12,7 @@ import {
   Select,
 } from "@heroui/react";
 import { useState } from "react";
-import { Plus } from "lucide-react";
+import { ArrowLeftIcon, BookText, Plus } from "lucide-react";
 
 import { useMock } from "../../contexts/mock-context";
 
@@ -41,14 +41,39 @@ export default function MainDrawer() {
 
   return (
     <>
-      <Button color="warning" variant="flat" onPress={onOpen}>
+      <Button disableRipple color="warning" variant="flat" onPress={onOpen}>
         Open Drawer
       </Button>
-      <Drawer isOpen={isOpen} onOpenChange={onOpenChange}>
-        <DrawerContent className="bg-black shadow-xl">
+      <Drawer hideCloseButton isOpen={isOpen} onOpenChange={onOpenChange}>
+        <DrawerContent className="bg-black shadow-xl w-[420px]">
           {(onClose) => (
             <>
               <DrawerHeader className="flex flex-col gap-1">
+                <div className="flex justify-between">
+                  <div>
+                    <Button
+                      isIconOnly
+                      aria-label="Back"
+                      color="primary"
+                      size="sm"
+                      variant="ghost"
+                      onPress={onClose}
+                    >
+                      <ArrowLeftIcon />
+                    </Button>
+                  </div>
+                  <div>
+                    <Button
+                      isIconOnly
+                      aria-label="Back"
+                      color="primary"
+                      size="sm"
+                      variant="ghost"
+                    >
+                      <BookText />
+                    </Button>
+                  </div>
+                </div>
                 <h2 className="text-xl font-semibold mb-2">
                   Create a test case
                 </h2>

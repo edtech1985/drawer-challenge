@@ -11,8 +11,10 @@ import {
   SelectItem,
   Divider,
   Skeleton,
+  ToastProvider,
+  addToast,
 } from "@heroui/react";
-import { ArrowLeftIcon, GitCommit, Leaf } from "lucide-react";
+import { ArrowLeftIcon, BookText, GitCommit } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Radio, RadioGroup } from "@heroui/react";
 import Image from "next/image";
@@ -57,13 +59,6 @@ export const steps = [
     icon: "",
   },
 ];
-
-const stepIconMap: Record<StepKey, string> = {
-  "session-management": "/pipeline-step-session-management.svg",
-  "rest-v2": "/pipeline-step-rest.svg",
-  "session-management2": "/pipeline-step-session-management.svg",
-  "transformer-jolt": "/pipeline-step-jolt.svg",
-};
 
 const mockedResponses = {
   "session-management": [
@@ -113,161 +108,192 @@ export default function MockResponseDrawer({ isOpen, onClose }: Props) {
   };
 
   return (
-    <Drawer isOpen={isOpen} placement="right" onOpenChange={onClose}>
-      <DrawerContent className="bg-black shadow-xl w-[420px]">
-        {() => (
-          <>
-            <DrawerHeader className="flex flex-col gap-1">
-              <div>
-                <Button
-                  isIconOnly
-                  aria-label="Back"
-                  color="primary"
-                  size="sm"
-                  variant="ghost"
-                >
-                  <ArrowLeftIcon />
-                </Button>
-              </div>
-              <h2 className="text-xl font-semibold">Mock Response</h2>
-              <p className="text-gray-500 text-sm">
-                You can choose a connector to simulate the response.
-              </p>
-            </DrawerHeader>
-
-            <DrawerBody>
-              {/* SELECT DE GRUPOS */}
-              <div className="rounded-lg mb-4 bg-black">
-                <Select
-                  className="w-full"
-                  disabledKeys={["select"]}
-                  placeholder="Choose a step to mock..."
-                  radius="sm"
-                  selectedKeys={selectedMock ? [selectedMock] : []}
-                  size="lg"
-                  variant="bordered"
-                  onSelectionChange={(keys) => {
-                    const key = Array.from(keys)[0];
-
-                    handleChange(key as string);
-                  }}
-                >
-                  {steps.map((step) => (
-                    <SelectItem key={step.key} textValue={step.label}>
-                      <div className="flex items-center gap-2">
-                        {step.icon && (
-                          <Image
-                            alt="Step icon"
-                            className="w-4 h-4 shrink-0"
-                            height={16}
-                            src={step.icon}
-                            width={16}
-                          />
-                        )}
-                        <span>{step.label}</span>
-                      </div>
-                    </SelectItem>
-                  ))}
-                </Select>
-              </div>
-
-              <Divider />
-
-              {/* SUB-OPÇÕES MOCKED */}
-              <div className="rounded-lg mb-4 px-2">
-                {loading ? (
-                  <div className="space-y-4">
-                    {[...Array(2)].map((_, i) => (
-                      <div
-                        key={i}
-                        className="flex items-center gap-3 bg-neutral-900 p-3 rounded-lg border border-neutral-700"
-                      >
-                        <div>
-                          <Skeleton className="flex rounded-full w-10 h-10" />
-                        </div>
-                        <div className="w-full flex flex-col gap-2">
-                          <Skeleton className="h-3 w-3/5 rounded-lg" />
-                          <Skeleton className="h-3 w-4/5 rounded-lg" />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  selectedMock &&
-                  mockedResponses[selectedMock as StepKey] && (
-                    <RadioGroup
-                      className="space-y-4 w-full"
-                      size="lg"
-                      value={selectedResponse || ""}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                        setSelectedResponse(e.target.value)
-                      }
+    <>
+      <Drawer
+        hideCloseButton
+        isOpen={isOpen}
+        placement="right"
+        onOpenChange={onClose}
+      >
+        <DrawerContent className="bg-black shadow-xl w-[420px]">
+          {() => (
+            <>
+              <DrawerHeader className="flex flex-col gap-1">
+                <div className="flex justify-between">
+                  <div>
+                    <Button
+                      isIconOnly
+                      aria-label="Back"
+                      color="primary"
+                      size="sm"
+                      variant="ghost"
+                      onPress={onClose}
                     >
-                      {mockedResponses[selectedMock as StepKey].map(
-                        (resp, index) => (
-                          <div key={index} className="!w-full">
-                            <Radio
-                              className="flex-row-reverse gap-8 bg-neutral-900 p-3 rounded-lg border border-neutral-700 mb-2 max-w-[400px]"
-                              size="lg"
-                              value={resp.name}
-                            >
-                              <div className="flex items-center gap-2 !w-full">
-                                {/* Ícone do step */}
-                                <Image
-                                  alt="Step Icon"
-                                  className="shrink-0"
-                                  height={24}
-                                  src="/tag-mock.svg"
-                                  width={24}
-                                />
-                                <div className="flex flex-col">
-                                  <span className="font-medium text-white">
-                                    {resp.name}{" "}
-                                    <span className="text-gray-400">
-                                      ({index + 1})
-                                    </span>
-                                  </span>
-                                  <span className="text-xs text-gray-400">
-                                    Created at {resp.createdAt}
-                                  </span>
-                                </div>
-                              </div>
-                            </Radio>
-                          </div>
-                        )
-                      )}
-                    </RadioGroup>
-                  )
-                )}
-              </div>
-
-              {!selectedMock && (
-                <div className="rounded-lg mb-4">
-                  <GitCommit />
-                  <p className="text-gray-500 text-sm mb-2">
-                    Choose a step to see saved mocked responses.
-                  </p>
+                      <ArrowLeftIcon />
+                    </Button>
+                  </div>
+                  <div>
+                    <Button
+                      isIconOnly
+                      aria-label="Back"
+                      color="primary"
+                      size="sm"
+                      variant="ghost"
+                    >
+                      <BookText />
+                    </Button>
+                  </div>
                 </div>
-              )}
-            </DrawerBody>
+                <h2 className="text-xl font-semibold">Mock Response</h2>
+                <p className="text-gray-500 text-sm">
+                  You can choose a connector to simulate the response.
+                </p>
+              </DrawerHeader>
 
-            <DrawerFooter>
-              <div className="flex justify-between w-full px-6 py-4">
-                <Button
-                  className={`w-full ${
-                    !selectedResponse ? "cursor-not-allowed opacity-50" : ""
-                  }`}
-                  color="primary"
-                  isDisabled={!selectedResponse}
-                  onPress={onClose}
-                >
-                  Apply
-                </Button>
-              </div>
-            </DrawerFooter>
-          </>
-        )}
-      </DrawerContent>
-    </Drawer>
+              <DrawerBody>
+                {/* SELECT DE GRUPOS */}
+                <div className="rounded-lg mb-4 bg-black">
+                  <Select
+                    className="w-full"
+                    disabledKeys={["select"]}
+                    placeholder="Choose a step to mock..."
+                    radius="sm"
+                    selectedKeys={selectedMock ? [selectedMock] : []}
+                    size="lg"
+                    variant="bordered"
+                    onSelectionChange={(keys) => {
+                      const key = Array.from(keys)[0];
+
+                      handleChange(key as string);
+                    }}
+                  >
+                    {steps.map((step) => (
+                      <SelectItem key={step.key} textValue={step.label}>
+                        <div className="flex items-center gap-2">
+                          {step.icon && (
+                            <Image
+                              alt="Step icon"
+                              className="w-4 h-4 shrink-0"
+                              height={16}
+                              src={step.icon}
+                              width={16}
+                            />
+                          )}
+                          <span>{step.label}</span>
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </Select>
+                </div>
+
+                <Divider />
+
+                {/* SUB-OPÇÕES MOCKED */}
+                <div className="rounded-lg mb-4 px-2">
+                  {loading ? (
+                    <div className="space-y-4">
+                      {[...Array(2)].map((_, i) => (
+                        <div
+                          key={i}
+                          className="flex items-center gap-3 bg-neutral-900 p-3 rounded-lg border border-neutral-700"
+                        >
+                          <div>
+                            <Skeleton className="flex rounded-full w-10 h-10" />
+                          </div>
+                          <div className="w-full flex flex-col gap-2">
+                            <Skeleton className="h-3 w-3/5 rounded-lg" />
+                            <Skeleton className="h-3 w-4/5 rounded-lg" />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    selectedMock &&
+                    mockedResponses[selectedMock as StepKey] && (
+                      <RadioGroup
+                        className="space-y-4 w-full"
+                        size="lg"
+                        value={selectedResponse || ""}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                          setSelectedResponse(e.target.value)
+                        }
+                      >
+                        {mockedResponses[selectedMock as StepKey].map(
+                          (resp, index) => (
+                            <div key={index} className="!w-full">
+                              <Radio
+                                className="flex-row-reverse gap-8 bg-neutral-900 p-3 rounded-lg border border-neutral-700 mb-2 max-w-[400px]"
+                                size="lg"
+                                value={resp.name}
+                              >
+                                <div className="flex items-center gap-2 !w-full">
+                                  {/* Ícone do step */}
+                                  <Image
+                                    alt="Step Icon"
+                                    className="shrink-0"
+                                    height={24}
+                                    src="/tag-mock.svg"
+                                    width={24}
+                                  />
+                                  <div className="flex flex-col">
+                                    <span className="font-medium text-white">
+                                      {resp.name}{" "}
+                                      <span className="text-gray-400">
+                                        ({index + 1})
+                                      </span>
+                                    </span>
+                                    <span className="text-xs text-gray-400">
+                                      Created at {resp.createdAt}
+                                    </span>
+                                  </div>
+                                </div>
+                              </Radio>
+                            </div>
+                          )
+                        )}
+                      </RadioGroup>
+                    )
+                  )}
+                </div>
+
+                {!selectedMock && (
+                  <div className="flex  flex-col items-center justify-center text-center rounded-lg mb-4">
+                    <GitCommit size="64" />
+                    <p className="text-gray-500 text-sm mb-4">
+                      Choose a step to see saved
+                      <br />
+                      mocked responses.
+                    </p>
+                  </div>
+                )}
+              </DrawerBody>
+
+              <DrawerFooter>
+                <div className="flex justify-between w-full px-6 py-4">
+                  <Button
+                    className={`w-full ${
+                      !selectedResponse ? "cursor-not-allowed opacity-50" : ""
+                    }`}
+                    color="primary"
+                    isDisabled={!selectedResponse}
+                    onPress={() => {
+                      addToast({
+                        description: "Your test has been created successfully.",
+                        color: "success",
+                        radius: "sm",
+                        variant: "bordered",
+                      });
+                      onClose();
+                    }}
+                  >
+                    Apply
+                  </Button>
+                </div>
+              </DrawerFooter>
+            </>
+          )}
+        </DrawerContent>
+      </Drawer>
+    </>
   );
 }
