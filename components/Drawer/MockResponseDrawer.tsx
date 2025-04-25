@@ -81,55 +81,49 @@ export default function MockResponseDrawer({ isOpen, onClose }: Props) {
     setSelectedMockResponse,
   } = useMock();
 
-  const [selectedResponse, setSelectedResponse] = useState<string | null>(
-    selectedMockResponse?.name || null
+  const [localSelectedMock, setLocalSelectedMock] = useState<string | null>(
+    null
   );
+  const [selectedResponse, setSelectedResponse] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (isOpen && selectedMockResponse) {
-      setSelectedResponse(selectedMockResponse.name);
-    }
-  }, [isOpen, selectedMockResponse]);
+    if (isOpen) {
+      setLocalSelectedMock(selectedMock);
 
-  useEffect(() => {
-    if (isOpen && !selectedMock) {
-      const stored = localStorage.getItem("mock-response-selected-step");
-
-      if (stored) setSelectedMock(stored);
-    }
-  }, [isOpen]);
-
-  useEffect(() => {
-    if (selectedMock) {
-      setLoading(true);
-
-      // Verifica se já existe uma resposta selecionada para este mock
       if (
         selectedMockResponse &&
+        selectedMock &&
         mockedResponses[selectedMock as StepKey]?.some(
           (r) => r.name === selectedMockResponse.name
         )
       ) {
         setSelectedResponse(selectedMockResponse.name);
       } else {
-        // Se não há uma resposta selecionada para este mock, limpa a seleção
         setSelectedResponse(null);
       }
 
+      if (!selectedMock) {
+        const stored = localStorage.getItem("mock-response-selected-step");
+
+        if (stored) {
+          setLocalSelectedMock(stored);
+        }
+      }
+    }
+  }, [isOpen, selectedMock, selectedMockResponse]);
+
+  useEffect(() => {
+    if (localSelectedMock) {
+      setLoading(true);
       const timer = setTimeout(() => setLoading(false), 500);
 
       return () => clearTimeout(timer);
     }
-  }, [selectedMock, selectedMockResponse]);
+  }, [localSelectedMock]);
 
   const handleChange = (key: string) => {
-    // Se for um novo mock diferente do atual, limpa a resposta selecionada no contexto
-    if (key !== selectedMock) {
-      setSelectedMockResponse(null);
-    }
-
-    setSelectedMock(key);
+    setLocalSelectedMock(key);
     localStorage.setItem("mock-response-selected-step", key);
     setSelectedResponse(null);
   };
@@ -206,7 +200,7 @@ export default function MockResponseDrawer({ isOpen, onClose }: Props) {
                         </div>
                       );
                     }}
-                    selectedKeys={selectedMock ? [selectedMock] : []}
+                    selectedKeys={localSelectedMock ? [localSelectedMock] : []}
                     size="lg"
                     variant="bordered"
                     onSelectionChange={(keys) => {
@@ -256,8 +250,8 @@ export default function MockResponseDrawer({ isOpen, onClose }: Props) {
                       ))}
                     </div>
                   ) : (
-                    selectedMock &&
-                    mockedResponses[selectedMock as StepKey] && (
+                    localSelectedMock &&
+                    mockedResponses[localSelectedMock as StepKey] && (
                       <RadioGroup
                         className="space-y-4 w-full"
                         size="lg"
@@ -266,7 +260,7 @@ export default function MockResponseDrawer({ isOpen, onClose }: Props) {
                           setSelectedResponse(e.target.value)
                         }
                       >
-                        {mockedResponses[selectedMock as StepKey].map(
+                        {mockedResponses[localSelectedMock as StepKey].map(
                           (resp, index) => (
                             <div key={index} className="!w-full">
                               <Radio
@@ -275,7 +269,6 @@ export default function MockResponseDrawer({ isOpen, onClose }: Props) {
                                 value={resp.name}
                               >
                                 <div className="flex items-center gap-2 !w-full">
-                                  {/* Ícone do step */}
                                   <Image
                                     alt="Step Icon"
                                     className="shrink-0"
@@ -304,8 +297,8 @@ export default function MockResponseDrawer({ isOpen, onClose }: Props) {
                   )}
                 </div>
 
-                {!selectedMock && (
-                  <div className="flex  flex-col items-center justify-center text-center rounded-lg mb-4">
+                {!localSelectedMock && (
+                  <div className="flex flex-col items-center justify-center text-center rounded-lg mb-4">
                     <GitCommit size="64" />
                     <p className="text-gray-500 text-sm mb-4">
                       Choose a step to see saved
@@ -323,15 +316,17 @@ export default function MockResponseDrawer({ isOpen, onClose }: Props) {
                     color="primary"
                     isDisabled={!selectedResponse}
                     onPress={() => {
-                      // Encontre o objeto de resposta selecionado
+                      if (localSelectedMock) {
+                        setSelectedMock(localSelectedMock);
+                      }
+
                       const selectedResponseObj =
-                        selectedMock && selectedResponse
-                          ? mockedResponses[selectedMock as StepKey].find(
-                              (r) => r.name === selectedResponse
+                        localSelectedMock && selectedResponse
+                          ? mockedResponses[localSelectedMock as StepKey].find(
+                              (r) => r.name === selectedResponse,
                             )
                           : null;
 
-                      // Atualize o contexto com a resposta selecionada
                       if (selectedResponseObj) {
                         setSelectedMockResponse(selectedResponseObj);
                       }
