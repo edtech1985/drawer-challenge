@@ -50,7 +50,7 @@ export const steps = [
   {
     key: "select",
     label: "You can select the step by clicking on canvas",
-    icon: "",
+    icon: "/ideia.png",
   },
 ];
 
