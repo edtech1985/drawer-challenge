@@ -59,7 +59,8 @@ const mockOptions = [
 export default function MainDrawer() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isMockDrawerOpen, setIsMockDrawerOpen] = useState(false);
-  const { selectedMock, selectedMockResponse } = useMock(); // Não precisa passar tipo aqui
+  const { selectedMock, selectedMockResponse } = useMock();
+  const [isSaving, setIsSaving] = useState(false);
 
   const selectedMockName =
     selectedMockResponse && typeof selectedMockResponse === "object"
@@ -259,14 +260,9 @@ export default function MainDrawer() {
                       label="Group"
                       placeholder="Add your test to a group"
                       radius="sm"
-                      selectedKeys={selectedMock ? [selectedMock] : []} // agora refletindo o estado do contexto
+                      selectedKeys={selectedMock ? [selectedMock] : []}
                       size="lg"
                       variant="bordered"
-                      // onSelectionChange={(keys) => {
-                      //   const key = String(Array.from(keys)[0]);
-
-                      //   setSelectedMock(key);
-                      // }}
                     >
                       {animals.map((animal) => (
                         <SelectItem key={animal.key}>{animal.label}</SelectItem>
@@ -277,19 +273,33 @@ export default function MainDrawer() {
               </DrawerBody>
               <DrawerFooter>
                 <div className="flex justify-between px-6 py-10 w-full">
-                  <Button color="danger" variant="flat" onPress={onClose}>
+                  <Button
+                    color="danger"
+                    isDisabled={isSaving}
+                    variant="flat"
+                    onPress={onClose}
+                  >
                     Cancel
                   </Button>
                   <Button
                     color="primary"
+                    isLoading={isSaving}
                     onPress={() => {
-                      addToast({
-                        description: "Your test has been created successfully.",
-                        color: "success",
-                        radius: "sm",
-                        variant: "bordered",
-                      });
-                      onClose();
+                      setIsSaving(true);
+
+                      setTimeout(() => {
+                        addToast({
+                          description:
+                            "Your test has been created successfully.",
+                          color: "success",
+                          radius: "sm",
+                          variant: "bordered",
+                        });
+
+                        setIsSaving(false);
+
+                        onClose();
+                      }, 1000);
                     }}
                   >
                     Save
