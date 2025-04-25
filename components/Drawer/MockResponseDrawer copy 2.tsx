@@ -12,10 +12,9 @@ import {
   Divider,
   Skeleton,
 } from "@heroui/react";
-import { ArrowLeftIcon, GitCommit, Leaf } from "lucide-react";
+import { GitCommit } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Radio, RadioGroup } from "@heroui/react";
-import Image from "next/image";
 
 import { useMock } from "@/contexts/mock-context";
 
@@ -31,39 +30,15 @@ type Props = {
 };
 
 export const steps = [
-  {
-    key: "session-management",
-    label: "Session Management",
-    icon: "/pipeline-step-session-management.svg",
-  },
-  {
-    key: "rest-v2",
-    label: "Rest V2 (HTTP / APIs)",
-    icon: "/pipeline-step-rest.svg",
-  },
-  {
-    key: "session-management2",
-    label: "Session Management",
-    icon: "/pipeline-step-session-management.svg",
-  },
-  {
-    key: "transformer-jolt",
-    label: "Transformer (JOLT)",
-    icon: "/pipeline-step-jolt.svg",
-  },
+  { key: "session-management", label: "Session Management" },
+  { key: "rest-v2", label: "Rest V2 (HTTP / APIs)" },
+  { key: "session-management2", label: "Session Management" },
+  { key: "transformer-jolt", label: "Transformer (JOLT)" },
   {
     key: "select",
     label: "You can select the step by clicking on canvas",
-    icon: "",
   },
 ];
-
-const stepIconMap: Record<StepKey, string> = {
-  "session-management": "/pipeline-step-session-management.svg",
-  "rest-v2": "/pipeline-step-rest.svg",
-  "session-management2": "/pipeline-step-session-management.svg",
-  "transformer-jolt": "/pipeline-step-jolt.svg",
-};
 
 const mockedResponses = {
   "session-management": [
@@ -118,17 +93,6 @@ export default function MockResponseDrawer({ isOpen, onClose }: Props) {
         {() => (
           <>
             <DrawerHeader className="flex flex-col gap-1">
-              <div>
-                <Button
-                  isIconOnly
-                  aria-label="Back"
-                  color="primary"
-                  size="sm"
-                  variant="ghost"
-                >
-                  <ArrowLeftIcon />
-                </Button>
-              </div>
               <h2 className="text-xl font-semibold">Mock Response</h2>
               <p className="text-gray-500 text-sm">
                 You can choose a connector to simulate the response.
@@ -141,7 +105,8 @@ export default function MockResponseDrawer({ isOpen, onClose }: Props) {
                 <Select
                   className="w-full"
                   disabledKeys={["select"]}
-                  placeholder="Choose a step to mock..."
+                  label="Group"
+                  placeholder="Add your test to a group"
                   radius="sm"
                   selectedKeys={selectedMock ? [selectedMock] : []}
                   size="lg"
@@ -153,29 +118,15 @@ export default function MockResponseDrawer({ isOpen, onClose }: Props) {
                   }}
                 >
                   {steps.map((step) => (
-                    <SelectItem key={step.key} textValue={step.label}>
-                      <div className="flex items-center gap-2">
-                        {step.icon && (
-                          <Image
-                            alt="Step icon"
-                            className="w-4 h-4 shrink-0"
-                            height={16}
-                            src={step.icon}
-                            width={16}
-                          />
-                        )}
-                        <span>{step.label}</span>
-                      </div>
-                    </SelectItem>
+                    <SelectItem key={step.key}>{step.label}</SelectItem>
                   ))}
                 </Select>
               </div>
 
-              <Divider />
-
               {/* SUB-OPÇÕES MOCKED */}
-              <div className="rounded-lg mb-4 px-2">
+              <div className="rounded-lg mb-6 px-2">
                 {loading ? (
+                  // ✅ Skeleton loading
                   <div className="space-y-4">
                     {[...Array(2)].map((_, i) => (
                       <div
@@ -196,8 +147,7 @@ export default function MockResponseDrawer({ isOpen, onClose }: Props) {
                   selectedMock &&
                   mockedResponses[selectedMock as StepKey] && (
                     <RadioGroup
-                      className="space-y-4 w-full"
-                      size="lg"
+                      className="space-y-4"
                       value={selectedResponse || ""}
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                         setSelectedResponse(e.target.value)
@@ -205,35 +155,23 @@ export default function MockResponseDrawer({ isOpen, onClose }: Props) {
                     >
                       {mockedResponses[selectedMock as StepKey].map(
                         (resp, index) => (
-                          <div key={index} className="!w-full">
-                            <Radio
-                              className="flex-row-reverse gap-8 bg-neutral-900 p-3 rounded-lg border border-neutral-700 mb-2 max-w-[400px]"
-                              size="lg"
-                              value={resp.name}
-                            >
-                              <div className="flex items-center gap-2 !w-full">
-                                {/* Ícone do step */}
-                                <Image
-                                  alt="Step Icon"
-                                  className="shrink-0"
-                                  height={24}
-                                  src="/tag-mock.svg"
-                                  width={24}
-                                />
-                                <div className="flex flex-col">
-                                  <span className="font-medium text-white">
-                                    {resp.name}{" "}
-                                    <span className="text-gray-400">
-                                      ({index + 1})
-                                    </span>
-                                  </span>
-                                  <span className="text-xs text-gray-400">
-                                    Created at {resp.createdAt}
-                                  </span>
-                                </div>
-                              </div>
-                            </Radio>
-                          </div>
+                          <Radio
+                            key={index}
+                            className="bg-neutral-900 p-3 rounded-lg border border-neutral-700"
+                            value={resp.name}
+                          >
+                            <div className="flex flex-col">
+                              <span className="font-medium text-white">
+                                {resp.name}{" "}
+                                <span className="text-gray-400">
+                                  ({index + 1})
+                                </span>
+                              </span>
+                              <span className="text-xs text-gray-400">
+                                Created at {resp.createdAt}
+                              </span>
+                            </div>
+                          </Radio>
                         )
                       )}
                     </RadioGroup>
@@ -241,26 +179,18 @@ export default function MockResponseDrawer({ isOpen, onClose }: Props) {
                 )}
               </div>
 
-              {!selectedMock && (
-                <div className="rounded-lg mb-4">
-                  <GitCommit />
-                  <p className="text-gray-500 text-sm mb-2">
-                    Choose a step to see saved mocked responses.
-                  </p>
-                </div>
-              )}
+              <Divider />
+              <div className="rounded-lg mb-4">
+                <GitCommit />
+                <p className="text-gray-500 text-sm mb-2">
+                  Choose a step to see saved mocked responses.
+                </p>
+              </div>
             </DrawerBody>
 
             <DrawerFooter>
               <div className="flex justify-between w-full px-6 py-4">
-                <Button
-                  className={`w-full ${
-                    !selectedResponse ? "cursor-not-allowed opacity-50" : ""
-                  }`}
-                  color="primary"
-                  isDisabled={!selectedResponse}
-                  onPress={onClose}
-                >
+                <Button className="w-full" color="primary" onPress={onClose}>
                   Apply
                 </Button>
               </div>
