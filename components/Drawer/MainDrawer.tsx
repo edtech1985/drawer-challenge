@@ -73,7 +73,7 @@ export default function MainDrawer() {
         Open Drawer
       </Button>
       <Drawer hideCloseButton isOpen={isOpen} onOpenChange={onOpenChange}>
-        <DrawerContent className="bg-background shadow-xl w-[420px]">
+        <DrawerContent className="bg-background shadow-xl w-[480px]">
           {(onClose) => (
             <>
               <DrawerHeader className="flex flex-col gap-1">

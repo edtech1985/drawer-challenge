@@ -136,7 +136,7 @@ export default function MockResponseDrawer({ isOpen, onClose }: Props) {
         placement="right"
         onOpenChange={onClose}
       >
-        <DrawerContent className="bg-background shadow-xl w-[420px]">
+        <DrawerContent className="bg-background shadow-xl w-[480px]">
           {() => (
             <>
               <DrawerHeader className="flex flex-col gap-1">
@@ -145,9 +145,10 @@ export default function MockResponseDrawer({ isOpen, onClose }: Props) {
                     <Button
                       isIconOnly
                       aria-label="Back"
+                      className="bg-transparent"
                       color="primary"
                       size="sm"
-                      variant="ghost"
+                      variant="flat"
                       onPress={onClose}
                     >
                       <ArrowLeftIcon />
@@ -157,9 +158,10 @@ export default function MockResponseDrawer({ isOpen, onClose }: Props) {
                     <Button
                       isIconOnly
                       aria-label="Back"
+                      className="bg-transparent"
                       color="primary"
                       size="sm"
-                      variant="ghost"
+                      variant="flat"
                     >
                       <BookText />
                     </Button>
@@ -232,7 +234,7 @@ export default function MockResponseDrawer({ isOpen, onClose }: Props) {
                   </Select>
                 </div>
 
-                <Divider />
+                <Divider className="mb-4" />
 
                 {/* SUB-OPÇÕES MOCKED */}
                 <div className="rounded-lg mb-4 px-2">
@@ -241,7 +243,7 @@ export default function MockResponseDrawer({ isOpen, onClose }: Props) {
                       {[...Array(2)].map((_, i) => (
                         <div
                           key={i}
-                          className="flex items-center gap-3 bg-gray-100 dark:bg-neutral-900 p-3 rounded-lg border border-gray-200 dark:border-neutral-700"
+                          className="flex items-center gap-3 bg-gray-100  p-3 rounded-lg border border-gray-200 dark:border-neutral-700"
                         >
                           <div>
                             <Skeleton className="flex rounded-full w-10 h-10" />
@@ -268,7 +270,7 @@ export default function MockResponseDrawer({ isOpen, onClose }: Props) {
                           (resp, index) => (
                             <div key={index} className="!w-full">
                               <Radio
-                                className="flex-row-reverse gap-8 bg-gray-100 dark:bg-neutral-900 p-3 rounded-lg border border-gray-200 dark:border-neutral-700 mb-2 max-w-[400px]"
+                                className="flex-row-reverse gap-8 bg-background px-6 py-4 rounded-lg border border-gray-200  mb-2 max-w-[400px]"
                                 size="lg"
                                 value={resp.name}
                               >
@@ -280,12 +282,9 @@ export default function MockResponseDrawer({ isOpen, onClose }: Props) {
                                     src="/tag-mock.svg"
                                     width={24}
                                   />
-                                  <div className="flex flex-col">
-                                    <span className="font-medium text-gray-900 dark:text-white">
-                                      {resp.name}{" "}
-                                      <span className="text-gray-500 dark:text-gray-400">
-                                        ({index + 1})
-                                      </span>
+                                  <div className="flex flex-col ">
+                                    <span className="font-medium ">
+                                      {resp.name} <span>({index + 1})</span>
                                     </span>
                                     <span className="text-xs text-gray-500 dark:text-gray-400">
                                       Created at {resp.createdAt}
@@ -316,12 +315,13 @@ export default function MockResponseDrawer({ isOpen, onClose }: Props) {
                 )}
               </DrawerBody>
 
-              <DrawerFooter>
-                <div className="flex justify-between w-full px-6 py-4">
+              <DrawerFooter className=" w-full px-10 py-6">
+                <div className="flex justify-between w-full">
                   <Button
-                    className={`w-full ${!selectedResponse ? "cursor-not-allowed opacity-50" : ""}`}
+                    className="w-full py-2 px-4 border-1px radius-md"
                     color="primary"
                     isDisabled={!selectedResponse}
+                    variant="bordered"
                     onPress={() => {
                       if (localSelectedMock) {
                         setSelectedMock(localSelectedMock);
