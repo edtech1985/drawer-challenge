@@ -53,10 +53,10 @@ export default function RootLayout({
                 isExternal
                 className="flex items-center gap-1 text-current"
                 href="https://edtech1985.com.br/projetos"
-                title="heroui.com homepage"
+                title="Github de Edson Costa"
               >
                 <span className="text-default-600">Developed by</span>
-                <p className="text-primary" color="secondary">
+                <p className="text-secondary" color="secondary">
                   {" "}
                   Edson Costa
                 </p>
