@@ -150,7 +150,7 @@ export default function MainDrawer() {
                     <>
                       <div className="border dark:border-gray-700 rounded-lg mb-1">
                         <div className="pl-4 p-3 flex items-center justify-between">
-                          <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-4">
                             <Image
                               alt="mock icon"
                               className="w-5 h-5"
@@ -214,7 +214,7 @@ export default function MainDrawer() {
                   ) : (
                     <InfoCard
                       description="Create or use a saved mock"
-                      title="Mock Responses2"
+                      title="Mock Responses"
                       onButtonClick={() => setIsMockDrawerOpen(true)}
                     />
                   )}
@@ -287,16 +287,19 @@ export default function MainDrawer() {
               <DrawerFooter>
                 <div className="flex justify-between px-6 py-10 w-full">
                   <Button
-                    color="danger"
+                    className="bg-transparent border-0 font-semibold"
+                    color="primary"
                     isDisabled={isSaving}
-                    variant="flat"
+                    variant="faded"
                     onPress={onClose}
                   >
                     Cancel
                   </Button>
                   <Button
+                    className="font-semibold"
                     color="primary"
                     isLoading={isSaving}
+                    variant="ghost"
                     onPress={() => {
                       setIsSaving(true);
                       setTimeout(() => {
