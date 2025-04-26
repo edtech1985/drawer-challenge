@@ -65,7 +65,7 @@ export default function MainDrawer() {
     selectedMockResponse && typeof selectedMockResponse === "object"
       ? selectedMockResponse.name
       : "Mock Responses";
-
+  
   const selectedMockData = mockOptions.find((m) => m.key === selectedMock);
 
   return (
@@ -146,19 +146,96 @@ export default function MainDrawer() {
                   />
 
                   {/* Mock Section */}
-                  {selectedMock ? (
-                    <>
-                      <div className="border dark:border-gray-700 rounded-lg mb-4">
-                        <div className="p-3 flex items-center justify-between">
-                          <div className="flex items-center gap-2">
+                  <div className="border dark:border-gray-700 rounded-lg mb-4">
+                    <div className="p-3 flex justify-between items-center">
+                      <div className="flex items-center gap-2">
+                        {selectedMock ? (
+                          <>
                             <Image
                               alt="mock icon"
                               className="w-5 h-5"
                               height={20}
                               src={
-                                selectedMockData?.icon ?? "/fallback-icon.svg"
+                                mockOptions.find((m) => m.key === selectedMock)
+                                  ?.icon ?? "/fallback-icon.svg"
                               }
                               width={20}
+                            />
+                            <div>
+                              <h4 className="font-medium">
+                                {selectedMockName}
+                              </h4>
+                              <p className="text-gray-600 dark:text-gray-400 text-sm">
+                                {mockOptions.find((m) => m.key === selectedMock)
+                                  ?.label ?? selectedMock}
+                              </p>
+                            </div>
+                          </>
+                        ) : (
+                          <div>
+                            <h4 className="font-medium text-[14px]">
+                              Mock Responses
+                            </h4>
+                            <p className="text-sm font-normal text-gray-600 dark:text-gray-400">
+                              Create or use a saved mock
+                            </p>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* 🔽 Novo dropdown com Edit e Clear */}
+                      {selectedMock ? (
+                        <Dropdown>
+                          <DropdownTrigger>
+                            <Button
+                              isIconOnly
+                              className="rounded-full"
+                              variant="light"
+                            >
+                              <MoreVertical size={20} />
+                            </Button>
+                          </DropdownTrigger>
+                          <DropdownMenu
+                            aria-label="Mock options"
+                            onAction={(key) => {
+                              if (key === "edit") {
+                                setIsMockDrawerOpen(true);
+                              }
+                              if (key === "clear") {
+                                setSelectedMock("");
+                              }
+                            }}
+                          >
+                            <DropdownItem key="edit">Edit</DropdownItem>
+                            <DropdownItem key="clear" className="text-danger">
+                              Clear
+                            </DropdownItem>
+                          </DropdownMenu>
+                        </Dropdown>
+                      ) : (
+                        <button
+                          className="rounded-full p-1"
+                          onClick={() => setIsMockDrawerOpen(true)}
+                        >
+                          <Plus size={20} />
+                        </button>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="border dark:border-gray-700 rounded-lg mb-4">
+                    <div className="p-3 flex justify-between items-center">
+                      <div className="flex items-center gap-2">
+                        {selectedMock ? (
+                          <>
+                            <Image
+                              alt="mock icon"
+                              className="w-5 h-5"
+                              height={20}
+                              width={20}
+                              src={
+                                selectedMockData?.icon ?? "/fallback-icon.svg"
+                              } // 🛠️ aqui checa se existe icon
                             />
                             <div>
                               <h4 className="font-medium">
@@ -168,9 +245,21 @@ export default function MainDrawer() {
                                 {selectedMockData?.label ?? selectedMock}
                               </p>
                             </div>
+                          </>
+                        ) : (
+                          <div>
+                            <h4 className="font-medium text-[14px]">
+                              Mock Responses
+                            </h4>
+                            <p className="text-sm font-normal text-gray-600 dark:text-gray-400">
+                              Create or use a saved mock
+                            </p>
                           </div>
+                        )}
+                      </div>
 
-                          {/* 🟣 Direita */}
+                      <div>
+                        {selectedMock ? (
                           <Dropdown>
                             <DropdownTrigger>
                               <Button
@@ -198,16 +287,17 @@ export default function MainDrawer() {
                               </DropdownItem>
                             </DropdownMenu>
                           </Dropdown>
-                        </div>
+                        ) : (
+                          <button
+                            className="rounded-full p-1"
+                            onClick={() => setIsMockDrawerOpen(true)}
+                          >
+                            <Plus size={20} />
+                          </button>
+                        )}
                       </div>
-                    </>
-                  ) : (
-                    <InfoCard
-                      description="Create or use a saved mock"
-                      title="Mock Responses2"
-                      onButtonClick={() => setIsMockDrawerOpen(true)}
-                    />
-                  )}
+                    </div>
+                  </div>
 
                   {/* Expect Results Section */}
                   <InfoCard
