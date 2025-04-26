@@ -1,8 +1,8 @@
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
-  name: "Next.js + HeroUI",
-  description: "Make beautiful websites regardless of your design experience.",
+  name: "Digibee Challenge - Edson Costa",
+  description: "Challenge realizado com Next.js TypeScrypt, Tailwind e HeroUI.",
   navItems: [
     {
       label: "Home",
@@ -60,10 +60,9 @@ export const siteConfig = {
     },
   ],
   links: {
-    github: "https://github.com/heroui-inc/heroui",
-    twitter: "https://twitter.com/hero_ui",
+    github: "https://github.com/edtech1985/drawer-challenge",
     docs: "https://heroui.com",
-    discord: "https://discord.gg/9b6yyZKmH4",
-    sponsor: "https://patreon.com/jrgarciadev",
+    linkedin: "https://www.linkedin.com/in/edtech1985",
+    purple: "https://www.digibee.com/company/about-digibee/",
   },
 };
