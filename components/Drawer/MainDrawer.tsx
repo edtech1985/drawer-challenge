@@ -149,7 +149,7 @@ export default function MainDrawer() {
                   {selectedMock ? (
                     <>
                       <div className="border dark:border-gray-700 rounded-lg mb-1">
-                        <div className="p-3 flex items-center justify-between">
+                        <div className="pl-4 p-3 flex items-center justify-between">
                           <div className="flex items-center gap-2">
                             <Image
                               alt="mock icon"
@@ -170,12 +170,11 @@ export default function MainDrawer() {
                             </div>
                           </div>
 
-                          {/* 🟣 Direita */}
                           <Dropdown>
                             <DropdownTrigger>
                               <Button
                                 isIconOnly
-                                className="rounded-full"
+                                className="rounded-full pl-2"
                                 variant="light"
                               >
                                 <MoreVertical size={20} />

@@ -18,7 +18,7 @@ export default function InfoCard({
 }: InfoCardProps) {
   return (
     <div className="border dark:border-gray-700 rounded-lg mb-4">
-      <div className="p-3 flex justify-between items-center">
+      <div className="pl-4 p-3 flex justify-between items-center">
         <div>
           <h4 className="font-medium text-[14px]">{title}</h4>{" "}
           <p className="text-sm font-normal text-gray-600 dark:text-gray-400">
