@@ -148,7 +148,7 @@ export default function MainDrawer() {
                   {/* Mock Section */}
                   {selectedMock ? (
                     <>
-                      <div className="border dark:border-gray-700 rounded-lg mb-4">
+                      <div className="border dark:border-gray-700 rounded-lg mb-1">
                         <div className="p-3 flex items-center justify-between">
                           <div className="flex items-center gap-2">
                             <Image
@@ -199,6 +199,17 @@ export default function MainDrawer() {
                             </DropdownMenu>
                           </Dropdown>
                         </div>
+                      </div>{" "}
+                      <div className="px-3 mb-4 pt-0 flex justify-end">
+                        <Button
+                          className="text-xs font-medium p-0 h-auto"
+                          variant="ghost"
+                          onPress={() => {
+                            /* ação para adicionar novo mock */
+                          }}
+                        >
+                          Add a new mock
+                        </Button>
                       </div>
                     </>
                   ) : (
