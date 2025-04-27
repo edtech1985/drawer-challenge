@@ -333,7 +333,6 @@ export default function MainDrawer() {
                               <path d="m6 6 12 12" />
                             </svg>
                           ),
-                          // color: "success",
                           icon: (
                             <Image
                               alt="Check Icon"
@@ -344,12 +343,12 @@ export default function MainDrawer() {
                             />
                           ),
                           radius: "lg",
-                          timeout: 10000,
+                          timeout: 3000,
                           variant: "bordered",
                         });
                         setIsSaving(false);
-                        // onClose();
-                      }, 100);
+                        onClose();
+                      }, 1000);
                     }}
                   >
                     Save
