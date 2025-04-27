@@ -17,10 +17,9 @@ import {
   DropdownTrigger,
   DropdownMenu,
   DropdownItem,
-  Alert,
 } from "@heroui/react";
 import { useState } from "react";
-import { BookText, MoreVertical, Plus, X } from "lucide-react";
+import { BookText, MoreVertical, X } from "lucide-react";
 import Image from "next/image";
 
 import { useMock } from "../../contexts/mock-context";
@@ -58,7 +57,7 @@ const mockOptions = [
 export default function MainDrawer() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isMockDrawerOpen, setIsMockDrawerOpen] = useState(false);
-  const { selectedMock, selectedMockResponse, setSelectedMock } = useMock(); // 👈 adicionado setSelectedMock
+  const { selectedMock, selectedMockResponse, setSelectedMock } = useMock();
   const [isSaving, setIsSaving] = useState(false);
 
   const selectedMockName =
@@ -78,7 +77,7 @@ export default function MainDrawer() {
           {(onClose) => (
             <>
               <DrawerHeader className="flex flex-col gap-2">
-                <div className="flex justify-between">
+                <div className="flex justify-between mb-2">
                   <Button
                     isIconOnly
                     aria-label="Back"
@@ -109,6 +108,7 @@ export default function MainDrawer() {
                   desired paths.
                 </p>
               </DrawerHeader>
+
               <DrawerBody>
                 <div className="mb-4">
                   <div className="flex justify-between items-center mb-4">
@@ -132,7 +132,7 @@ export default function MainDrawer() {
                 </div>
 
                 <div className="mb-4">
-                  <div className="flex justify-between items-center mb-2">
+                  <div className="flex justify-between items-center mb-4">
                     <h3 className="font-medium uppercase text-sm">
                       Define the conditions
                     </h3>
@@ -229,7 +229,7 @@ export default function MainDrawer() {
 
                 {/* Test Details */}
                 <div className="mb-4">
-                  <div className="flex justify-between items-center mb-2">
+                  <div className="flex justify-between items-center mb-4">
                     <h3 className="font-medium uppercase text-sm">
                       Organize your tests
                     </h3>
@@ -284,8 +284,8 @@ export default function MainDrawer() {
                 </div>
               </DrawerBody>
 
-              <DrawerFooter>
-                <div className="flex justify-between px-6 py-10 w-full">
+              <DrawerFooter className="max-h-[88px] px-10 py-6">
+                <div className="flex justify-between  w-full ">
                   <Button
                     className="bg-transparent border-0 font-semibold"
                     color="primary"
