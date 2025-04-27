@@ -19,7 +19,13 @@ import {
   DropdownItem,
 } from "@heroui/react";
 import { useState } from "react";
-import { BookText, MoreVertical, X } from "lucide-react";
+import {
+  BookText,
+  CheckCircle2,
+  CircleCheck,
+  MoreVertical,
+  X,
+} from "lucide-react";
 import Image from "next/image";
 
 import { useMock } from "../../contexts/mock-context";
@@ -306,13 +312,44 @@ export default function MainDrawer() {
                         addToast({
                           description:
                             "Your test has been created successfully.",
-                          color: "success",
-                          radius: "sm",
+                          classNames: {
+                            base: "bg-[#EBFFE8] max-w-[280px] h-20 mb-6",
+                            closeButton:
+                              "opacity-50 absolute right-4 top-1/2 -translate-y-1/2 text-[#0D0D0D]",
+                            description: "text-[#016F2F]",
+                          },
+                          closeIcon: (
+                            <svg
+                              fill="none"
+                              height="32"
+                              stroke="currentColor"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              viewBox="0 0 24 24"
+                              width="32"
+                            >
+                              <path d="M18 6 6 18" />
+                              <path d="m6 6 12 12" />
+                            </svg>
+                          ),
+                          // color: "success",
+                          icon: (
+                            <Image
+                              alt="Check Icon"
+                              className="w-6 h-6"
+                              height={24}
+                              src="/check-circle.svg"
+                              width={24}
+                            />
+                          ),
+                          radius: "lg",
+                          timeout: 10000,
                           variant: "bordered",
                         });
                         setIsSaving(false);
-                        onClose();
-                      }, 1000);
+                        // onClose();
+                      }, 100);
                     }}
                   >
                     Save
