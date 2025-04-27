@@ -95,7 +95,7 @@ export default function MockResponseDrawer({ isOpen, onClose }: Props) {
         selectedMockResponse &&
         selectedMock &&
         mockedResponses[selectedMock as StepKey]?.some(
-          (r) => r.name === selectedMockResponse.name,
+          (r) => r.name === selectedMockResponse.name
         )
       ) {
         setSelectedResponse(selectedMockResponse.name);
@@ -175,9 +175,10 @@ export default function MockResponseDrawer({ isOpen, onClose }: Props) {
 
               <DrawerBody>
                 {/* SELECT DE GRUPOS */}
-                <div className="rounded-lg mb-4 ">
+
+                <div className="rounded-lg mb-4 text-[14px] font-semibold ">
                   <Select
-                    className="w-full"
+                    className="w-full placeholder:text-[14px] placeholder:font-semibold"
                     disabledKeys={["select"]}
                     placeholder="Choose a step to mock..."
                     radius="sm"
@@ -214,9 +215,15 @@ export default function MockResponseDrawer({ isOpen, onClose }: Props) {
                     {steps.map((step) => (
                       <SelectItem
                         key={step.key}
-                        className="bg-background"
+                        className="bg-background p-2"
                         textValue={step.label}
                       >
+                        {step.key === "select" && (
+                          <div className="-mx-6">
+                            <Divider className="w-full mb-4" />
+                          </div>
+                        )}
+
                         <div className="flex items-center gap-2">
                           {step.icon && (
                             <Image
@@ -233,13 +240,11 @@ export default function MockResponseDrawer({ isOpen, onClose }: Props) {
                     ))}
                   </Select>
                 </div>
-
                 <div className="-mx-6">
                   <Divider className="w-full mb-4" />
                 </div>
-
                 {/* SUB-OPÇÕES MOCKED */}
-                <div className="rounded-lg mb-4 px-2">
+                <div className="rounded-lg mb-4 px-0">
                   {loading ? (
                     <div className="space-y-4">
                       {[...Array(2)].map((_, i) => (
@@ -261,8 +266,7 @@ export default function MockResponseDrawer({ isOpen, onClose }: Props) {
                     localSelectedMock &&
                     mockedResponses[localSelectedMock as StepKey] && (
                       <RadioGroup
-                        className="space-y-4 w-full"
-                        size="lg"
+                        className="space-y-4"
                         value={selectedResponse || ""}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                           setSelectedResponse(e.target.value)
@@ -270,13 +274,16 @@ export default function MockResponseDrawer({ isOpen, onClose }: Props) {
                       >
                         {mockedResponses[localSelectedMock as StepKey].map(
                           (resp, index) => (
-                            <div key={index} className="!w-full">
+                            <div key={index}>
                               <Radio
-                                className="flex-row-reverse gap-8 bg-background px-6 py-4 rounded-lg border border-gray-200  mb-2 max-w-[400px]"
-                                size="lg"
+                                className="flex-row-reverse gap-20 bg-background px-4 py-4 rounded-lg border border-gray-200 mb-2"
+                                classNames={{
+                                  base: "m-0 p-0",
+                                }}
+                                size="md"
                                 value={resp.name}
                               >
-                                <div className="flex items-center gap-2 !w-full">
+                                <div className="flex items-center gap-4 !w-full">
                                   <Image
                                     alt="Step Icon"
                                     className="shrink-0"
@@ -284,8 +291,8 @@ export default function MockResponseDrawer({ isOpen, onClose }: Props) {
                                     src="/tag-mock.svg"
                                     width={24}
                                   />
-                                  <div className="flex flex-col ">
-                                    <span className="font-medium ">
+                                  <div className="flex flex-col w-full pr-6">
+                                    <span className="font-medium text-[14px] ">
                                       {resp.name} <span>({index + 1})</span>
                                     </span>
                                     <span className="text-xs text-gray-500 dark:text-gray-400">
@@ -301,7 +308,6 @@ export default function MockResponseDrawer({ isOpen, onClose }: Props) {
                     )
                   )}
                 </div>
-
                 {!localSelectedMock && (
                   <div className="flex flex-col items-center justify-center text-center rounded-lg mb-4">
                     <GitCommit
