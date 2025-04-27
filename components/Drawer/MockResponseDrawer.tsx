@@ -95,7 +95,7 @@ export default function MockResponseDrawer({ isOpen, onClose }: Props) {
         selectedMockResponse &&
         selectedMock &&
         mockedResponses[selectedMock as StepKey]?.some(
-          (r) => r.name === selectedMockResponse.name
+          (r) => r.name === selectedMockResponse.name,
         )
       ) {
         setSelectedResponse(selectedMockResponse.name);
@@ -139,8 +139,8 @@ export default function MockResponseDrawer({ isOpen, onClose }: Props) {
         <DrawerContent className="bg-background shadow-xl w-[480px]">
           {() => (
             <>
-              <DrawerHeader className="flex flex-col gap-1">
-                <div className="flex justify-between">
+              <DrawerHeader className="flex flex-col gap-2">
+                <div className="flex justify-between mb-2">
                   <div>
                     <Button
                       isIconOnly
@@ -167,7 +167,7 @@ export default function MockResponseDrawer({ isOpen, onClose }: Props) {
                     </Button>
                   </div>
                 </div>
-                <h2 className="text-xl font-semibold">Mock Response</h2>
+                <h2 className="text-xl font-semibold mb-2">Mock Response</h2>
                 <p className="text-gray-500 dark:text-gray-400 text-sm">
                   You can choose a connector to simulate the response.
                 </p>
@@ -234,7 +234,9 @@ export default function MockResponseDrawer({ isOpen, onClose }: Props) {
                   </Select>
                 </div>
 
-                <Divider className="mb-4" />
+                <div className="-mx-6">
+                  <Divider className="w-full mb-4" />
+                </div>
 
                 {/* SUB-OPÇÕES MOCKED */}
                 <div className="rounded-lg mb-4 px-2">
@@ -303,10 +305,10 @@ export default function MockResponseDrawer({ isOpen, onClose }: Props) {
                 {!localSelectedMock && (
                   <div className="flex flex-col items-center justify-center text-center rounded-lg mb-4">
                     <GitCommit
-                      className="text-gray-400 dark:text-gray-500"
+                      className="text-gray-400 dark:text-gray-500 mb-6"
                       size="64"
                     />
-                    <p className="text-gray-500 dark:text-gray-400 text-sm mb-4">
+                    <p className="text-gray-500 dark:text-gray-400 text-base font-nomral mb-4">
                       Choose a step to see saved
                       <br />
                       mocked responses.
