@@ -179,9 +179,14 @@ export default function MockResponseDrawer({ isOpen, onClose }: Props) {
                 <div className="rounded-lg mb-4 text-[14px] font-semibold ">
                   <Select
                     className="w-full placeholder:text-[14px] placeholder:font-semibold"
+                    classNames={{
+                      label: "group-data-[filled=true]:-translate-y-5",
+                      trigger: "min-h-16",
+                      listboxWrapper: "max-h-[400px]",
+                    }}
                     disabledKeys={["select"]}
                     placeholder="Choose a step to mock..."
-                    radius="sm"
+                    radius="lg"
                     renderValue={(items) => {
                       const key = items[0]?.key as string;
                       const selected = steps.find((s) => s.key === key);
@@ -189,7 +194,7 @@ export default function MockResponseDrawer({ isOpen, onClose }: Props) {
                       if (!selected) return null;
 
                       return (
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 pl-2">
                           {selected.icon && (
                             <Image
                               alt="Selected step icon"
@@ -199,7 +204,9 @@ export default function MockResponseDrawer({ isOpen, onClose }: Props) {
                               width={40}
                             />
                           )}
-                          <span>{selected.label}</span>
+                          <span className="pl-3  text-[14px]">
+                            {selected.label}
+                          </span>
                         </div>
                       );
                     }}
