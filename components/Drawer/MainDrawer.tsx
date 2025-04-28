@@ -83,11 +83,11 @@ export default function MainDrawer() {
           {(onClose) => (
             <>
               <DrawerHeader className="flex flex-col gap-2">
-                <div className="flex justify-between mb-2">
+                <div className="flex items-center justify-between mb-2">
                   <Button
                     isIconOnly
                     aria-label="Back"
-                    className="bg-trtansparent"
+                    className="bg-transparent p-0 min-w-0 w-5 h-5"
                     color="primary"
                     size="sm"
                     variant="flat"
@@ -98,7 +98,7 @@ export default function MainDrawer() {
                   <Button
                     isIconOnly
                     aria-label="Documentation"
-                    className="bg-transparent"
+                    className="bg-transparent p-0 min-w-0 w-5 h-5"
                     color="primary"
                     size="sm"
                     variant="flat"
@@ -115,7 +115,7 @@ export default function MainDrawer() {
                 </p>
               </DrawerHeader>
 
-              <DrawerBody>
+              <DrawerBody className="overflow-y-scroll scrollbar-hide">
                 <div className="mb-4">
                   <div className="flex justify-between items-center mb-4">
                     <h3 className="font-medium uppercase text-sm">

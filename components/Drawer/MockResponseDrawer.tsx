@@ -140,12 +140,12 @@ export default function MockResponseDrawer({ isOpen, onClose }: Props) {
           {() => (
             <>
               <DrawerHeader className="flex flex-col gap-2">
-                <div className="flex justify-between mb-2">
+                <div className="flex items-center justify-between mb-2">
                   <div>
                     <Button
                       isIconOnly
                       aria-label="Back"
-                      className="bg-transparent"
+                      className="bg-transparent p-0 min-w-0 w-5 h-5"
                       color="primary"
                       size="sm"
                       variant="flat"
@@ -158,7 +158,7 @@ export default function MockResponseDrawer({ isOpen, onClose }: Props) {
                     <Button
                       isIconOnly
                       aria-label="Back"
-                      className="bg-transparent"
+                      className="bg-transparent p-0 min-w-0 w-5 h-5"
                       color="primary"
                       size="sm"
                       variant="flat"
