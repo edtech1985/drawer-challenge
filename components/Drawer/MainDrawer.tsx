@@ -19,45 +19,22 @@ import {
   DropdownItem,
 } from "@heroui/react";
 import { useState } from "react";
-import {
-  BookText,
-  CheckCircle2,
-  CircleCheck,
-  MoreVertical,
-  X,
-} from "lucide-react";
+import { BookText, MoreVertical, X } from "lucide-react";
 import Image from "next/image";
 
 import { useMock } from "../../contexts/mock-context";
+import { steps } from "../../mocks/mock-data";
 
 import MockResponseDrawer from "./MockResponseDrawer";
 
 import InfoCard from "@/components/TestOptions/InfoCard";
 
-export const groups = [
+const groups = [
   { key: "frontend", label: "Front End" },
   { key: "backend", label: "Back End" },
   { key: "full", label: "FullStack" },
   { key: "support", label: "Support" },
   { key: "infra", label: "Infrastructure" },
-];
-
-const mockOptions = [
-  {
-    key: "session-management",
-    label: "Session Management",
-    icon: "/pipeline-step-session-management.svg",
-  },
-  {
-    key: "rest-v2",
-    label: "Rest V2 (HTTP / APIs)",
-    icon: "/pipeline-step-rest.svg",
-  },
-  {
-    key: "transformer-jolt",
-    label: "Transformer (JOLT)",
-    icon: "/pipeline-step-jolt.svg",
-  },
 ];
 
 export default function MainDrawer() {
@@ -67,11 +44,60 @@ export default function MainDrawer() {
   const [isSaving, setIsSaving] = useState(false);
 
   const selectedMockName =
-    selectedMockResponse && typeof selectedMockResponse === "object"
+    typeof selectedMockResponse === "object" && selectedMockResponse?.name
       ? selectedMockResponse.name
       : "Mock Responses";
 
-  const selectedMockData = mockOptions.find((m) => m.key === selectedMock);
+  const selectedMockData = steps.find((m) => m.key === selectedMock);
+
+  const handleSave = (onClose: () => void) => {
+    setIsSaving(true);
+    setTimeout(() => {
+      addToast({
+        description: "Your test has been created successfully.",
+        classNames: {
+          base: "bg-[#EBFFE8] max-w-[280px] h-20 mb-6",
+          closeButton:
+            "opacity-50 absolute right-4 top-1/2 -translate-y-1/2 text-[#0D0D0D]",
+          description: "text-[#016F2F]",
+        },
+        closeIcon: (
+          <svg
+            fill="none"
+            height="32"
+            stroke="currentColor"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            viewBox="0 0 24 24"
+            width="32"
+          >
+            <path d="M18 6 6 18" />
+            <path d="m6 6 12 12" />
+          </svg>
+        ),
+        icon: (
+          <Image
+            alt="Check Icon"
+            className="w-6 h-6"
+            height={24}
+            src="/check-circle.svg"
+            width={24}
+          />
+        ),
+        radius: "lg",
+        timeout: 3000,
+        variant: "bordered",
+      });
+      setIsSaving(false);
+      onClose();
+    }, 1000);
+  };
+
+  const handleMockAction = (key: string) => {
+    if (key === "edit") setIsMockDrawerOpen(true);
+    if (key === "clear") setSelectedMock("");
+  };
 
   return (
     <>
@@ -188,14 +214,9 @@ export default function MainDrawer() {
                             </DropdownTrigger>
                             <DropdownMenu
                               aria-label="Mock options"
-                              onAction={(key) => {
-                                if (key === "edit") {
-                                  setIsMockDrawerOpen(true);
-                                }
-                                if (key === "clear") {
-                                  setSelectedMock("");
-                                }
-                              }}
+                              onAction={(key) =>
+                                handleMockAction(key.toString())
+                              }
                             >
                               <DropdownItem key="edit">Edit</DropdownItem>
                               <DropdownItem key="clear" className="text-danger">
@@ -267,14 +288,6 @@ export default function MainDrawer() {
                   <div className="rounded-lg mb-4">
                     <Select
                       className="w-full"
-                      disabledKeys={[
-                        "zebra",
-                        "tiger",
-                        "lion",
-                        "elephant",
-                        "crocodile",
-                        "whale",
-                      ]}
                       label="Group"
                       placeholder="Add your test to a group"
                       radius="sm"
@@ -306,50 +319,7 @@ export default function MainDrawer() {
                     color="primary"
                     isLoading={isSaving}
                     variant="ghost"
-                    onPress={() => {
-                      setIsSaving(true);
-                      setTimeout(() => {
-                        addToast({
-                          description:
-                            "Your test has been created successfully.",
-                          classNames: {
-                            base: "bg-[#EBFFE8] max-w-[280px] h-20 mb-6",
-                            closeButton:
-                              "opacity-50 absolute right-4 top-1/2 -translate-y-1/2 text-[#0D0D0D]",
-                            description: "text-[#016F2F]",
-                          },
-                          closeIcon: (
-                            <svg
-                              fill="none"
-                              height="32"
-                              stroke="currentColor"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              viewBox="0 0 24 24"
-                              width="32"
-                            >
-                              <path d="M18 6 6 18" />
-                              <path d="m6 6 12 12" />
-                            </svg>
-                          ),
-                          icon: (
-                            <Image
-                              alt="Check Icon"
-                              className="w-6 h-6"
-                              height={24}
-                              src="/check-circle.svg"
-                              width={24}
-                            />
-                          ),
-                          radius: "lg",
-                          timeout: 3000,
-                          variant: "bordered",
-                        });
-                        setIsSaving(false);
-                        onClose();
-                      }, 1000);
-                    }}
+                    onPress={() => handleSave(onClose)}
                   >
                     Save
                   </Button>

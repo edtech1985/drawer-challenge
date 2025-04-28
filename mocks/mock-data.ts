@@ -24,7 +24,10 @@ export const steps = [
   },
 ];
 
-export const mockedResponses = {
+export const mockedResponses: Record<
+  StepKey,
+  { name: string; createdAt: string }[]
+> = {
   "session-management": [
     { name: "Mocked response name #1", createdAt: "10 Dec, 2024" },
     { name: "Mocked response name #2", createdAt: "5 Dec, 2024" },
